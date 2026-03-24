@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "Customer": {
+      "title": "Customer",
+      "description": "Information about a customer.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Customer name." },
+        "email": { "type": "string", "format": "email", "description": "Customer email." },
+        "phone": { "type": "string", "description": "Customer phone number." },
+        "address": { "type": "string", "description": "Customer address." }
+      },
+      "required": ["name", "email"]
+    },
+    "Machine": {
+      "title": "Machine",
+      "description": "Information about a printing machine.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Machine name." },
+        "type": { "type": "string", "enum": ["Offset", "Digital", "Flexography", "Large Format", "Serigraphy"], "description": "Machine type." },
+        "costPerHour": { "type": "number", "description": "Cost per hour of operation." },
+        "setupCost": { "type": "number", "description": "Setup cost for a job." },
+        "maxFormat": { "type": "string", "description": "Maximum format size (e.g., 70x100)." }
+      },
+      "required": ["name", "type", "costPerHour", "setupCost"]
+    },
+    "Material": {
+      "title": "Material",
+      "description": "Information about a printing material.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Material name." },
+        "type": { "type": "string", "enum": ["Paper", "Ink", "Plates", "Other"], "description": "Material type." },
+        "costPerUnit": { "type": "number", "description": "Cost per unit (e.g., per sheet, per kg)." },
+        "stock": { "type": "number", "description": "Current stock level." }
+      },
+      "required": ["name", "type", "costPerUnit", "stock"]
+    },
+    "Quote": {
+      "title": "Quote",
+      "description": "Information about a quote.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "description": "Reference to the customer." },
+        "machineId": { "type": "string", "description": "Reference to the machine." },
+        "materialId": { "type": "string", "description": "Reference to the material." },
+        "quantity": { "type": "number", "description": "Quantity to print." },
+        "totalCost": { "type": "number", "description": "Total calculated cost." },
+        "status": { "type": "string", "enum": ["Draft", "Sent", "Accepted", "Rejected"], "description": "Quote status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation date." }
+      },
+      "required": ["customerId", "machineId", "materialId", "quantity", "totalCost", "status"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Information about a production order.",
+      "type": "object",
+      "properties": {
+        "quoteId": { "type": "string", "description": "Reference to the quote." },
+        "status": { "type": "string", "enum": ["Planning", "Printing", "Finishing", "Delivered"], "description": "Production status." },
+        "deadline": { "type": "string", "format": "date-time", "description": "Production deadline." },
+        "assignedTo": { "type": "string", "description": "User assigned to the order." }
+      },
+      "required": ["quoteId", "status", "deadline"]
+    },
+    "KPI": {
+      "title": "KPI",
+      "description": "Key Performance Indicators for production.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date", "description": "Date of the KPI." },
+        "totalOrders": { "type": "number", "description": "Total orders processed." },
+        "totalRevenue": { "type": "number", "description": "Total revenue generated." },
+        "efficiency": { "type": "number", "description": "Production efficiency percentage." }
+      },
+      "required": ["date", "totalOrders", "totalRevenue", "efficiency"]
+    }
+  },
+  "firestore": {
+    "/customers/{customerId}": { "schema": "Customer", "description": "Collection of customers." },
+    "/machines/{machineId}": { "schema": "Machine", "description": "Collection of machines." },
+    "/materials/{materialId}": { "schema": "Material", "description": "Collection of materials." },
+    "/quotes/{quoteId}": { "schema": "Quote", "description": "Collection of quotes." },
+    "/orders/{orderId}": { "schema": "Order", "description": "Collection of production orders." },
+    "/kpis/{kpiId}": { "schema": "KPI", "description": "Collection of KPIs." }
+  }
+}
